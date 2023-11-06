@@ -22,22 +22,25 @@ GitHub Pagesでデモを公開しています。
 
 [https://pixiv.github.io/ChatVRM](https://pixiv.github.io/ChatVRM)
 
+## 準備
+### 環境
+Docker, docker-composeを端末にインストール。
+### APIキー
+- OPENAI APIキー
+- Koeiromap APIキー  
+
+[.env.local](.env.local.sample)にAPIキーを記載  
+[config.json](.env.local.sample)にAPIキーを記載
 
 ## 実行
-ローカル環境で実行する場合はこのリポジトリをクローンするか、ダウンロードしてください。
+リポジトリをクローンするか、ダウンロードしてください。  
+リポジトリフォルダに移動後以下を実行
 
 ```bash
-git clone https://github.com/UEC-CED/ChatVRM.git
-```
-
-必要なパッケージをインストールしてください。
-```bash
-npm install
-```
-
-パッケージのインストールが完了した後、以下のコマンドで開発用のWebサーバーを起動します。
-```bash
-npm run dev
+# https
+docker compose up -d
+# http
+docker compose --file docker-compose.wo_ssl.yml up -d
 ```
 
 実行後、以下のURLにアクセスして動作を確認して下さい。
