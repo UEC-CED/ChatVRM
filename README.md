@@ -27,7 +27,7 @@ GitHub Pagesでデモを公開しています。
 ローカル環境で実行する場合はこのリポジトリをクローンするか、ダウンロードしてください。
 
 ```bash
-git clone git@github.com:pixiv/ChatVRM.git
+git clone https://github.com/UEC-CED/ChatVRM.git
 ```
 
 必要なパッケージをインストールしてください。
