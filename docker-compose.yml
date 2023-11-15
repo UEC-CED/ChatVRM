@@ -13,6 +13,8 @@ services:
       - ./nginx/ssl:/etc/nginx/ssl
     working_dir: /etc/nginx/ssl
     tty: true
+    stdin_open: true
+    command: /bin/sh -c "while :; do sleep 10; done"
     networks:
       - nginx_network
   front_app:
