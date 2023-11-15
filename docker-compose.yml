@@ -43,6 +43,8 @@ services:
     command: sh -c "cd /qa_api && uvicorn main:app --reload --host 0.0.0.0 --port 12344 --proxy-headers"
     networks:
       - nginx_network
+    env_file:
+      - ./frontend/.env.local
   get_uec_info:
     build: ./get_uec_info
     working_dir: /get_uec_info

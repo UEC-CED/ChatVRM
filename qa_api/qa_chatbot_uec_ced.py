@@ -1,6 +1,5 @@
 import sys
 import os
-import json
 import argparse
 import logging
 from llama_index import GPTVectorStoreIndex, SimpleDirectoryReader
@@ -11,10 +10,7 @@ from langchain.chat_models import ChatOpenAI
 
 class UECQueryEngine:
     def __init__(self, reindex):
-        with open('./config.json', 'r') as f:
-            config = json.load(f)
-
-        os.environ["OPENAI_API_KEY"] = config["OPENAI_API_KEY"]
+        os.environ["OPENAI_API_KEY"] = os.environ.get("NEXT_PUBLIC_OPENAI_APIKEY")
         logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, force=True)
 
         llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo"))
