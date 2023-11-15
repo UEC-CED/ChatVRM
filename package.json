@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:proxy": "next dev -p 4000 & local-ssl-proxy --key localhost.key --cert localhost.crt --source 3000 --target 4000",
+    "dev:proxy": "next dev -p 80 & local-ssl-proxy --key localhost.key --cert localhost.crt --source 443 --target 80",
     "build": "next build",
     "start": "next build && next start",
     "export": "next export",
