@@ -19,8 +19,7 @@ services:
       - nginx_network
   front_app:
     build:
-      context: .
-      # dockerfile: Dockerfile
+      context: ./frontend
     container_name: chatVRM
     ports:
       - 8080:8080
@@ -29,7 +28,7 @@ services:
       - 443:443
     tty: true # コンテナの起動永続化
     volumes:
-      - .:/workspace
+      - ./frontend:/workspace
     command: sh -c "bash create_certificates.sh && npm install && npm run dev:proxy"
     networks:
       - nginx_network
