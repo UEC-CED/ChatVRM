@@ -31,6 +31,7 @@ export const MessageInput = ({
               isProcessing={isMicRecording}
               disabled={isChatProcessing}
               onClick={onClickMicButton}
+              description="音声認識を開始します"
             />
             <input
               type="text"
@@ -47,6 +48,7 @@ export const MessageInput = ({
               isProcessing={isChatProcessing}
               disabled={isChatProcessing || !userMessage}
               onClick={onClickSendButton}
+              description="ChatGPTのみを使って返答文を生成します"
             />
             <IconButton
               iconName="24/Question"
@@ -55,6 +57,7 @@ export const MessageInput = ({
               disabled={isChatProcessing || !userMessage}
               onClick={onClickSendQAButton}
               label="Q&A"
+              description="電気通信大学の情報を参照して返答文を生成します"
             />
           </div>
         </div>
