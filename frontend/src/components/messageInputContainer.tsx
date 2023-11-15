@@ -33,10 +33,11 @@ export const MessageInputContainer = ({
       if (event.results[0].isFinal) {
         setUserMessage(text);
         // 返答文の生成を開始
-        onChatProcessStart(text);
+        // onChatProcessStart(text);
       }
     },
-    [onChatProcessStart]
+    // [onChatProcessStart]
+    []
   );
 
   // 無音が続いた場合も終了する
