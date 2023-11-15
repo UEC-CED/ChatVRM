@@ -55,9 +55,9 @@ export const Settings = ({
       <div className="max-h-full overflow-auto">
         <div className="text-text1 max-w-3xl mx-auto px-24 py-64 ">
           <div className="my-24 typography-32 font-bold">設定</div>
-          <div className="my-24">
-            <div className="my-16 typography-20 font-bold">OpenAI API キー</div>
-            <input
+          {/* <div className="my-24"> */}
+            {/* <div className="my-16 typography-20 font-bold">OpenAI API キー</div> */}
+            {/* <input
               className="text-ellipsis px-16 py-8 w-col-span-2 bg-surface1 hover:bg-surface1-hover rounded-8"
               type="text"
               placeholder="sk-..."
@@ -71,14 +71,14 @@ export const Settings = ({
                 label="OpenAIのサイト"
               />
               で取得できます。取得したAPIキーをフォームに入力してください。
-            </div>
-            <div className="my-16">
+            </div> */}
+            {/* <div className="my-16">
               ChatGPT
               APIはブラウザから直接アクセスしています。また、APIキーや会話内容はピクシブのサーバには保存されません。
               <br />
               ※利用しているモデルはChatGPT API (GPT-3.5)です。
-            </div>
-          </div>
+            </div> */}
+          {/* </div> */}
           <div className="my-40">
             <div className="my-16 typography-20 font-bold">
               キャラクターモデル
@@ -105,7 +105,7 @@ export const Settings = ({
           </div>
           <div className="my-40">
             <div className="my-16 typography-20 font-bold">声の調整</div>
-            <div>
+            {/* <div>
               KoemotionのKoeiromap APIを使用しています。詳しくは
               <Link
                 url="https://koemotion.rinna.co.jp"
@@ -122,7 +122,7 @@ export const Settings = ({
                 value={koeiromapKey}
                 onChange={onChangeKoeiromapKey}
               />
-            </div>
+            </div> */}
 
             <div className="mt-16 font-bold">プリセット</div>
             <div className="my-8 grid grid-cols-2 gap-[8px]">

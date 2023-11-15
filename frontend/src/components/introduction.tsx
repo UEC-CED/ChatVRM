@@ -34,6 +34,9 @@ export const Introduction = ({
       <div className="mx-auto my-auto max-w-3xl max-h-full p-24 overflow-auto bg-white rounded-16">
         <div className="my-24">
           <div className="my-8 font-bold typography-20 text-secondary ">
+            AI Shimazaki
+          </div>
+          <div className="my-8 font-bold typography-20 text-secondary ">
             このアプリケーションについて
           </div>
           <div>
@@ -66,14 +69,15 @@ export const Introduction = ({
               }
               label={"Koeiromap API"}
             />
-            を使用しています。 詳細はこちらの
+            を使用しています。 
+            {/* 詳細はこちらの
             <Link
               url={"https://inside.pixiv.blog/2023/04/28/160000"}
               label={"技術解説記事"}
             />
-            をご覧ください。
+            をご覧ください。 */}
           </div>
-          <div className="my-16">
+          {/* <div className="my-16">
             このデモはGitHubでソースコードを公開しています。自由に変更や改変をお試しください！
             <br />
             リポジトリ：
@@ -81,7 +85,7 @@ export const Introduction = ({
               url={"https://github.com/pixiv/ChatVRM"}
               label={"https://github.com/pixiv/ChatVRM"}
             />
-          </div>
+          </div> */}
         </div>
 
         <div className="my-24">
@@ -93,7 +97,7 @@ export const Introduction = ({
           </div>
         </div>
 
-        <div className="my-24">
+        {/* <div className="my-24">
           <div className="my-8 font-bold typography-20 text-secondary">
             Koeiromap APIキー
           </div>
@@ -111,8 +115,8 @@ export const Introduction = ({
               label="詳細はこちら"
             />
           </div>
-        </div>
-        <div className="my-24">
+        </div> */}
+        {/* <div className="my-24">
           <div className="my-8 font-bold typography-20 text-secondary">
             OpenAI APIキー
           </div>
@@ -137,7 +141,7 @@ export const Introduction = ({
             <br />
             ※利用しているモデルはChatGPT API (GPT-3.5)です。
           </div>
-        </div>
+        </div> */}
         <div className="my-24">
           <button
             onClick={() => {
@@ -145,7 +149,8 @@ export const Introduction = ({
             }}
             className="font-bold bg-secondary hover:bg-secondary-hover active:bg-secondary-press disabled:bg-secondary-disabled text-white px-24 py-8 rounded-oval"
           >
-            APIキーを入力してはじめる
+            {/* APIキーを入力してはじめる */}
+            はじめる
           </button>
         </div>
       </div>
