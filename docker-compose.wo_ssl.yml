@@ -2,7 +2,7 @@ version: '3'
 services:
   front_app:
     build:
-      context: .
+      context: ./frontend
     container_name: chatVRM
     ports:
       - 8080:8080
@@ -10,7 +10,7 @@ services:
       - 4000:4000
     tty: true # コンテナの起動永続化
     volumes:
-      - .:/workspace
+      - ./frontend:/workspace
     command: sh -c "npm install && npm run dev"
     networks:
       - nginx_network
