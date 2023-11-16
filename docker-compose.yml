@@ -16,24 +16,24 @@ services:
     networks:
       - nginx_network
   uec_qa:
-    build: ./qa_api
+    build: ./backend/qa_api
     working_dir: /qa_api
     tty: true
     ports: 
       - "12344:12344"
     volumes:
-      - ./qa_api:/qa_api
-    command: sh -c "cd /qa_api && uvicorn main:app --reload --host 0.0.0.0 --port 12344 --proxy-headers"
+      - ./backend/qa_api:/qa_api
+    command: sh -c "uvicorn main:app --reload --host 0.0.0.0 --port 12344 --proxy-headers"
     networks:
       - nginx_network
     env_file:
       - ./frontend/.env.local
   scrape_uec_info:
-    build: ./scrape_uec_info
+    build: ./backend/scrape_uec_info
     working_dir: /scrape_uec_info
     tty: true
     volumes:
-      - ./scrape_uec_info:/scrape_uec_info
+      - ./backend/scrape_uec_info:/scrape_uec_info
 
 networks:
   nginx_network:
