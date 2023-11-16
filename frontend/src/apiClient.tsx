@@ -5,8 +5,7 @@ export const apiClient = axios.create({
 });
 
 export const apiViaClient = axios.create({
-    // baseURL: "http://localhost:3000/ced-iot/api/"
-    baseURL: "https://brown01.ced.cei.uec.ac.jp/ced-iot/api/"
+    baseURL: process.env.NEXT_PUBLIC_BASE_URL
 });
 
 export const getUECInfo = async (newMessage: string) => {
