@@ -1,54 +1,38 @@
-# ChatVRM
-
-ChatVRMはブラウザで簡単に3Dキャラクターと会話ができるデモアプリケーションです。
-
-VRMファイルをインポートしてキャラクターに合わせた声の調整や、感情表現を含んだ返答文の生成などを行うことができます。
-
-ChatVRMの各機能は主に以下の技術を使用しています。
-
-- ユーザーの音声の認識
-    - [Web Speech API(SpeechRecognition)](https://developer.mozilla.org/ja/docs/Web/API/SpeechRecognition)
-- 返答文の生成
-    - [ChatGPT API](https://platform.openai.com/docs/api-reference/chat)
-- 読み上げ音声の生成
-    - [Koemotion/Koeiromap API](https://koemotion.rinna.co.jp/)
-- 3Dキャラクターの表示
-    - [@pixiv/three-vrm](https://github.com/pixiv/three-vrm)
-
-
-## デモ
-
-GitHub Pagesでデモを公開しています。
-
-[https://pixiv.github.io/ChatVRM](https://pixiv.github.io/ChatVRM)
+# AI Shimazaki
+電気通信大学 技術職員である島崎をAI化したものです  
+雑談や電気通信大学に関する質問ができます
 
 ## 準備
 ### 環境
-Docker, docker-composeを端末にインストール。
+Docker, docker-composeを端末にインストール
 ### APIキー
-- OPENAI APIキー
-- Koeiromap APIキー  
+以下を取得してください
+- OPENAI APIキー （参考：https://book.st-hakky.com/data-science/open-ai-create-api-key/）
+- Koeiromap APIキー （参考：https://note.com/npaka/n/n44652d3c9fcc）
 
-[.env.local](.env.local.sample)にAPIキーを記載  
-[config.json](.env.local.sample)にAPIキーを記載
+`.env.local`にAPIキーを記載(参考：[.env.local.sample](/frontend/.env.local.sample))  
 
 ## 実行
 リポジトリをクローンするか、ダウンロードしてください。  
+
 リポジトリフォルダに移動後以下を実行
 
 ```bash
-# https
+# https(音声認識を使用したい場合, 通常はこちら)
 docker compose up -d
-# http
+# http(音声認識使用不可)
 docker compose --file docker-compose.wo_ssl.yml up -d
 ```
 
-実行後、以下のURLにアクセスして動作を確認して下さい。
+実行後、以下のURLにアクセスして動作を確認して下さい  
+- httpsの場合：[https://localhost/ced-iot](https://localhost/ced-iot)  
+- httpの場合：[http://localhost/ced-iot](http://localhost/ced-iot) 
 
-[http://localhost:3000](http://localhost:3000) 
-
-
----
+### 大学サーバーの利用
+大学のサーバーで運用をする場合，以下の事項が必要です
+- 443, 80ポートを開ける
+- `.env.local`のBASE_URLにサーバーアドレスを記載(参考：[.env.local.sample](/frontend/.env.local.sample))  
+- アクセス先の例：https://brown01.ced.cei.uec.ac.jp/ced-iot/
 
 ## ChatGPT API
 
@@ -68,8 +52,9 @@ Koeiromap APIの仕様や利用規約については以下のリンクや公式�
 - [https://koemotion.rinna.co.jp/](https://koemotion.rinna.co.jp/)
 
 # VRM
-VRMファイルを用意すれば任意のアバターを読み込める。  
-例えば、[ジョイマン高木のVRM](https://campaign.showroom-live.com/takagi/)を使用することができる。
+VRMファイルを用意すれば任意のアバターを読み込める  
+例えば、[ジョイマン高木のVRM](https://campaign.showroom-live.com/takagi/)を使用することができる  
+また，[VRoidStudio](https://vroid.com/studio)を使用してオリジナルのアバターを作成できる
 
 # 背景
 [_document.tsx](src/pages/_document.tsx)の`<body style={{ backgroundImage: `url(${buildUrl("/bg-ced.png")})` }}>`を変更
