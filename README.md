@@ -10,7 +10,7 @@ Docker, docker-composeを端末にインストール
 - OPENAI APIキー （参考：https://book.st-hakky.com/data-science/open-ai-create-api-key/）
 - Koeiromap APIキー （参考：https://note.com/npaka/n/n44652d3c9fcc）
 
-`.env.local`にAPIキーを記載(参考：[.env.local.sample](/frontend/.env.local.sample))  
+`.env.local`を`/frontend/`に作成してAPIキーを記載(参考：[/frontend/.env.local.sample](/frontend/.env.local.sample))  
 
 ## 実行
 リポジトリをクローンするか、ダウンロードしてください。  
@@ -31,7 +31,7 @@ docker compose --file docker-compose.wo_ssl.yml up -d
 ### 大学サーバーの利用
 大学のサーバーで運用をする場合，以下の事項が必要です
 - 443, 80ポートを開ける
-- `.env.local`のBASE_URLにサーバーアドレスを記載(参考：[.env.local.sample](/frontend/.env.local.sample))  
+- `/frontend/.env.local`のBASE_URLにサーバーアドレスを記載(参考：[/frontend/.env.local.sample](/frontend/.env.local.sample))  
 - アクセス先の例：https://brown01.ced.cei.uec.ac.jp/ced-iot/
 
 ## ChatGPT API
