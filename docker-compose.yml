@@ -1,22 +1,5 @@
 version: '3'
 services:
-  nginx:
-    build: ./nginx
-    container_name: nginx
-    depends_on:
-      - front_app
-      - uec_qa
-    ports:
-      - 8443:443
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./nginx/ssl:/etc/nginx/ssl
-    working_dir: /etc/nginx/ssl
-    tty: true
-    stdin_open: true
-    command: /bin/sh -c "while :; do sleep 10; done"
-    networks:
-      - nginx_network
   front_app:
     build:
       context: ./frontend
@@ -45,12 +28,12 @@ services:
       - nginx_network
     env_file:
       - ./frontend/.env.local
-  get_uec_info:
-    build: ./get_uec_info
-    working_dir: /get_uec_info
+  scrape_uec_info:
+    build: ./scrape_uec_info
+    working_dir: /scrape_uec_info
     tty: true
     volumes:
-      - ./get_uec_info:/get_uec_info
+      - ./scrape_uec_info:/scrape_uec_info
 
 networks:
   nginx_network:
