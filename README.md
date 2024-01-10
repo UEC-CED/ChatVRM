@@ -8,7 +8,7 @@ Docker, docker-composeを端末にインストール
 ### APIキー
 以下を取得してください
 - OPENAI APIキー （参考：https://book.st-hakky.com/data-science/open-ai-create-api-key/）
-- Koeiromap APIキー （参考：https://note.com/npaka/n/n44652d3c9fcc）
+- Koeiromap APIキー （参考：[https://note.com/npaka/n/n44652d3c9fcc](https://note.com/npaka/n/n44652d3c9fcc)）
 
 `.env.local`を`/frontend/`に作成してAPIキーを記載(参考：[/frontend/.env.local.sample](/frontend/.env.local.sample))  
 
