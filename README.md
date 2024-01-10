@@ -31,7 +31,7 @@ docker compose --file docker-compose.wo_ssl.yml up -d
 ### 大学サーバーの利用
 大学のサーバーで運用をする場合，以下の事項が必要です
 - 443, 80ポートを開ける
-- `/frontend/.env.local`のBASE_URLにサーバーアドレスを記載(参考：[/frontend/.env.local.sample](/frontend/.env.local.sample))  
+- `/frontend/.env.local`のBASE_URLにサーバーアドレスを記載(`https://brown01.ced.cei.uec.ac.jp/ced-iot/api/`のように最後に`/api`を記述すること　参考：[/frontend/.env.local.sample](/frontend/.env.local.sample))  
 - アクセス先の例：https://brown01.ced.cei.uec.ac.jp/ced-iot/
 
 ## ChatGPT API
