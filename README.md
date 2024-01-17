@@ -34,6 +34,10 @@ docker compose --file docker-compose.wo_ssl.yml up -d
 - `/frontend/.env.local`のBASE_URLにサーバーアドレスを記載(`https://brown01.ced.cei.uec.ac.jp/ced-iot/api/`のように最後に`/api`を記述すること　参考：[/frontend/.env.local.sample](/frontend/.env.local.sample))  
 - アクセス先の例：https://brown01.ced.cei.uec.ac.jp/ced-iot/
 
+## 電通大QA
+[backend/qa_api/data](backend/qa_api/data)に電通大に関する情報を記述したテキストファイルを配置してください.  
+記述形式は現在検討中です．
+
 ## ChatGPT API
 
 ChatVRMでは返答文の生成にChatGPT APIを使用しています。
