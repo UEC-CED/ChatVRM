@@ -37,6 +37,7 @@ class UECQueryEngine:
 
         # クエリエンジンの作成
         self.query_engine = index.as_query_engine()
+        # self.query_engine = index.as_query_engine(streaming=True) #streamingを追加
 
     def query(self, question):
         return self.query_engine.query(question)
@@ -46,7 +47,6 @@ class UECQueryEngine:
         index = GPTVectorStoreIndex.from_documents(documents)
         # インデックスの保存
         index.storage_context.persist()
-
 
 if __name__ == "__main__":
     # コマンドライン引数の処理
@@ -60,3 +60,23 @@ if __name__ == "__main__":
         question = input("電気通信大学に関する質問を入力してください: ")
         answer = query_engine.query(question)
         print(answer)
+
+
+        # streamingデバック
+        # print("type:", type(answer))
+        # answer.print_response_stream() #streamingを追加
+        # chatgpt_stream(answer)
+
+        # ジェネレーターからデータを受け取り、処理する
+        # try:
+        #     for response in answer.response_gen:
+        #         print(response)
+        # except Exception as e:
+        #     # エラーが発生した場合の処理
+        #     print(f"エラーが発生しました: {e}")
+
+        # # ストリームが終了したことを示す
+        # print("全ての回答を受信しました。")
+
+    
+
