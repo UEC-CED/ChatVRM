@@ -36,8 +36,8 @@ class UECQueryEngine:
             index = load_index_from_storage(storage_context)
 
         # クエリエンジンの作成
-        self.query_engine = index.as_query_engine()
-        # self.query_engine = index.as_query_engine(streaming=True) #streamingを追加
+        # self.query_engine = index.as_query_engine()
+        self.query_engine = index.as_query_engine(streaming=True) #streamingを追加
 
     def query(self, question):
         return self.query_engine.query(question)
@@ -61,7 +61,6 @@ if __name__ == "__main__":
         answer = query_engine.query(question)
         print(answer)
 
-
         # streamingデバック
         # print("type:", type(answer))
         # answer.print_response_stream() #streamingを追加
@@ -77,6 +76,3 @@ if __name__ == "__main__":
 
         # # ストリームが終了したことを示す
         # print("全ての回答を受信しました。")
-
-    
-

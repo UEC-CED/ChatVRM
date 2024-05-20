@@ -137,6 +137,50 @@ export default function Home() {
     [chatLog, handleSpeakEcho]
   );
 
+  /**
+   * アシスタントに電通大のQAをStreamingで聞く
+   */
+  const handleSendQAStreaming = useCallback(
+    async (text: string) => {
+      const newMessage = text;
+      let aiTextLog = "";
+      if (newMessage == null) return;
+
+      setChatProcessing(true);
+      // ユーザーの発言を追加して表示
+      const messageLog: Message[] = [
+        ...chatLog,
+        { role: "user", content: newMessage },
+      ];
+      setChatLog(messageLog);
+      try {
+        const data = await getUECInfoviaLocalAPI(newMessage);
+        aiTextLog = data.ans
+
+        
+        // 音声合成して再生
+        handleSpeakEcho(aiTextLog);
+
+
+        // アシスタントの返答をログに追加
+        const messageLogAssistant: Message[] = [
+          ...messageLog,
+          { role: "assistant", content: aiTextLog },
+        ];
+        setChatLog(messageLogAssistant);
+        setChatProcessing(false);
+      } catch(error) {
+        console.error(error);
+        handleSpeakEcho("すみません、エラーが発生しました．");
+        setChatProcessing(false);
+        // ユーザーの発言を削除(最後の発話を削除)
+        const messageLog: Message[] = chatLog.slice(0, -1);
+        setChatLog(messageLog);
+      }
+    },
+    [chatLog, handleSpeakEcho]
+  );
+
 
 
   /**

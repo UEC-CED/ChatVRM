@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import qa_chatbot_uec_ced
-from fastapi.response import StreamingResponse
+from fastapi.responses import StreamingResponse
+import time
+
 
 app = FastAPI()
 
@@ -28,14 +30,18 @@ def hello_world():
 @app.get("/question")
 def return_answer(question_sentence: str):
     ans = str(quert_engine.query(question_sentence))
-
-    # streamingなし
     # 。ごとに改行を入れる
     ans = ans.replace("。", "。\n")
     return {"ans": ans}
 
-# streamingあり
-# return StreamingResponse(ans.response_gen, media_type="text/event-stream")
+
+@app.get("/questionStreaming")
+def return_answer(question_sentence: str):
+    ans = quert_engine.query(question_sentence)
+    # # 。ごとに改行を入れる
+    # ans = ans.replace("。", "。\n")
+    return StreamingResponse(ans.response_gen, media_type="text/event-stream")
+
 
 @app.get("/makeindex")
 def make_index():
