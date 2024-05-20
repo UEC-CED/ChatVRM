@@ -5,7 +5,8 @@ const StreamingComponent = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch('http://uec_qa:12344/query?question_sentence=電気通信大学について教えて');
+      // const response = await fetch('http://uec_qa:12344/questionStreaming?question_sentence=電気通信大学について教えて');
+      const response = await fetch('http://localhost:12344/questionStreaming?question_sentence=電気通信大学について教えて');
       const reader = response.body.getReader();
       const decoder = new TextDecoder('utf-8');
 
