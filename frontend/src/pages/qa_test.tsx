@@ -5,20 +5,49 @@ const StreamingComponent = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // const response = await fetch('http://uec_qa:12344/questionStreaming?question_sentence=電気通信大学について教えて');
       const response = await fetch('http://localhost:12344/questionStreaming?question_sentence=電気通信大学について教えて');
-      const reader = response.body.getReader();
+      const reader = response.body?.getReader();
       const decoder = new TextDecoder('utf-8');
 
-      const processStream = async () => {
-        let done, value;
-        do {
-          ({ done, value } = await reader.read());
-          value = decoder.decode(value);
-          if (value) {
-            setMessages(prev => [...prev, value]);
+      if (!reader) {
+        throw new Error("Stream reader not available");
+      }
+
+      const stream = new ReadableStream({
+        async start(controller) {
+          try {
+            let done, value;
+            while (true) {
+              ({ done, value } = await reader.read());
+              if (done) break;
+              const data = decoder.decode(value, { stream: true });
+              controller.enqueue(data);
+            }
+          } catch (error) {
+            controller.error(error);
+          } finally {
+            reader.releaseLock();
+            controller.close();
           }
-        } while (!done);
+        },
+      });
+
+      const processStream = async () => {
+        const streamReader = stream.getReader();
+        try {
+          let done, value;
+          while (true) {
+            ({ done, value } = await streamReader.read());
+            if (done) break;
+            if (value) {
+              setMessages(prev => [...prev, value]);
+            }
+          }
+        } catch (error) {
+          console.error(error);
+        } finally {
+          streamReader.releaseLock();
+        }
       };
 
       processStream().catch(console.error);

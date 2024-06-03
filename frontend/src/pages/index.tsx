@@ -68,7 +68,7 @@ export default function Home() {
       onStart?: () => void,
       onEnd?: () => void
     ) => {
-      speakCharacter(screenplay, viewer, koeiromapKey, onStart, onEnd);
+      speakCharacter(screenplay, viewer, koeiromapKey || "", onStart, onEnd);
     },
     [viewer, koeiromapKey]
   );
@@ -142,8 +142,13 @@ export default function Home() {
    */
   const handleSendQAStreaming = useCallback(
     async (text: string) => {
+      if (!openAiKey) {
+        setAssistantMessage("APIキーが入力されていません");
+        return;
+      }
+
       const newMessage = text;
-      let aiTextLog = "";
+
       if (newMessage == null) return;
 
       setChatProcessing(true);
@@ -153,32 +158,120 @@ export default function Home() {
         { role: "user", content: newMessage },
       ];
       setChatLog(messageLog);
-      try {
-        const data = await getUECInfoviaLocalAPI(newMessage);
-        aiTextLog = data.ans
 
-        
-        // 音声合成して再生
-        handleSpeakEcho(aiTextLog);
+      // Chat GPTへ
+      const messages: Message[] = [
+        {
+          role: "system",
+          content: systemPrompt,
+        },
+        ...messageLog,
+      ];
+      
+      // TODO: UEC_QAによるStreamingを作る
+      const response = await fetch(`http://localhost:12344/questionStreaming?question_sentence=${newMessage}`);
+      const readerRes = response.body?.getReader();
+      const decoder = new TextDecoder('utf-8');
 
-
-        // アシスタントの返答をログに追加
-        const messageLogAssistant: Message[] = [
-          ...messageLog,
-          { role: "assistant", content: aiTextLog },
-        ];
-        setChatLog(messageLogAssistant);
-        setChatProcessing(false);
-      } catch(error) {
-        console.error(error);
+      // readerResがundefinedのときはエラー
+      if (readerRes === undefined) {
         handleSpeakEcho("すみません、エラーが発生しました．");
         setChatProcessing(false);
-        // ユーザーの発言を削除(最後の発話を削除)
-        const messageLog: Message[] = chatLog.slice(0, -1);
-        setChatLog(messageLog);
+        return;
       }
+
+      const stream = new ReadableStream({
+        async start(controller) {
+          try {
+            let done, value;
+            while (true) {
+              ({ done, value } = await readerRes.read());
+              if (done) break;
+              const data = decoder.decode(value, { stream: true });
+              controller.enqueue(data);
+            }
+          } catch (error) {
+            controller.error(error);
+          } finally {
+            readerRes.releaseLock();
+            controller.close();
+          }
+        },
+      });
+
+      if (stream == null) {
+        setChatProcessing(false);
+        return;
+      }
+
+      const reader = stream.getReader();
+      let receivedMessage = "";
+      let aiTextLog = "";
+      let tag = "";
+      const sentences = new Array<string>();
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          receivedMessage += value;
+
+          // 返答内容のタグ部分の検出
+          const tagMatch = receivedMessage.match(/^\[(.*?)\]/);
+          if (tagMatch && tagMatch[0]) {
+            tag = tagMatch[0];
+            receivedMessage = receivedMessage.slice(tag.length);
+          }
+
+          // 返答を一文単位で切り出して処理する
+          const sentenceMatch = receivedMessage.match(
+            /^(.+[。．！？\n]|.{10,}[、,])/
+          );
+          if (sentenceMatch && sentenceMatch[0]) {
+            const sentence = sentenceMatch[0];
+            sentences.push(sentence);
+            receivedMessage = receivedMessage
+              .slice(sentence.length)
+              .trimStart();
+
+            // 発話不要/不可能な文字列だった場合はスキップ
+            if (
+              !sentence.replace(
+                /^[\s\[\(\{「［（【『〈《〔｛«‹〘〚〛〙›»〕》〉』】）］」\}\)\]]+$/g,
+                ""
+              )
+            ) {
+              continue;
+            }
+
+            const aiText = `${tag} ${sentence}`;
+            const aiTalks = textsToScreenplay([aiText], koeiroParam);
+            aiTextLog += aiText;
+
+            // 文ごとに音声を生成 & 再生、返答を表示
+            const currentAssistantMessage = sentences.join(" ");
+            handleSpeakAi(aiTalks[0], () => {
+              setAssistantMessage(currentAssistantMessage);
+            });
+          }
+        }
+      } catch (e) {
+        setChatProcessing(false);
+        console.error(e);
+      } finally {
+        reader.releaseLock();
+      }
+
+      // アシスタントの返答をログに追加
+      const messageLogAssistant: Message[] = [
+        ...messageLog,
+        { role: "assistant", content: aiTextLog },
+      ];
+
+      setChatLog(messageLogAssistant);
+      setChatProcessing(false);
     },
-    [chatLog, handleSpeakEcho]
+    [systemPrompt, chatLog, handleSpeakAi, openAiKey, koeiroParam]
   );
 
 
@@ -299,8 +392,8 @@ export default function Home() {
     <div className={"font-M_PLUS_2"}>
       <Meta />
       <Introduction
-        openAiKey={openAiKey}
-        koeiroMapKey={koeiromapKey}
+        openAiKey={openAiKey || ""}
+        koeiroMapKey={koeiromapKey || ""}
         onChangeAiKey={setOpenAiKey}
         onChangeKoeiromapKey={setKoeiromapKey}
       />
@@ -308,15 +401,15 @@ export default function Home() {
       <MessageInputContainer
         isChatProcessing={chatProcessing}
         onChatProcessStart={handleSendChat}
-        onChatQAProcessStart={handleSendQA}
+        onChatQAProcessStart={handleSendQAStreaming}
       />
       <Menu
-        openAiKey={openAiKey}
+        openAiKey={openAiKey || ""}
         systemPrompt={systemPrompt}
         chatLog={chatLog}
         koeiroParam={koeiroParam}
         assistantMessage={assistantMessage}
-        koeiromapKey={koeiromapKey}
+        koeiromapKey={koeiromapKey || ""}
         onChangeAiKey={setOpenAiKey}
         onChangeSystemPrompt={setSystemPrompt}
         onChangeChatLog={handleChangeChatLog}
