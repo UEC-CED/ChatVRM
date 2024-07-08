@@ -167,8 +167,9 @@ export default function Home() {
       ];
   
       try {
-        // const response = await fetch(`/ced-iot/api/getUECInfoStreaming?message=${encodeURIComponent(newMessage)}`);
-        const response = await fetch(`http://localhost:12344/questionStreaming?question_sentence=${encodeURIComponent(newMessage)}`);
+        const baseURL = process.env.NEXT_PUBLIC_BASE_URL
+        const response = await fetch(`${baseURL}getUECInfoStreaming?message=${encodeURIComponent(newMessage)}`);
+        // const response = await fetch(`http://localhost:12344/questionStreaming?question_sentence=${encodeURIComponent(newMessage)}`);
   
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
