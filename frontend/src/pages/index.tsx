@@ -98,46 +98,6 @@ export default function Home() {
   );
 
   /**
-   * アシスタントに電通大のQAを聞く
-   */
-  const handleSendQA = useCallback(
-    async (text: string) => {
-      const newMessage = text;
-      let aiTextLog = "";
-      if (newMessage == null) return;
-
-      setChatProcessing(true);
-      // ユーザーの発言を追加して表示
-      const messageLog: Message[] = [
-        ...chatLog,
-        { role: "user", content: newMessage },
-      ];
-      setChatLog(messageLog);
-      try {
-        const data = await getUECInfoviaLocalAPI(newMessage);
-        aiTextLog = data.ans
-        // 音声合成して再生
-        handleSpeakEcho(aiTextLog);
-        // アシスタントの返答をログに追加
-        const messageLogAssistant: Message[] = [
-          ...messageLog,
-          { role: "assistant", content: aiTextLog },
-        ];
-        setChatLog(messageLogAssistant);
-        setChatProcessing(false);
-      } catch (error) {
-        console.error(error);
-        handleSpeakEcho("すみません、エラーが発生しました．");
-        setChatProcessing(false);
-        // ユーザーの発言を削除(最後の発話を削除)
-        const messageLog: Message[] = chatLog.slice(0, -1);
-        setChatLog(messageLog);
-      }
-    },
-    [chatLog, handleSpeakEcho]
-  );
-
-  /**
    * アシスタントに電通大のQAをStreamingで聞く
    */
   const handleSendQAStreaming = useCallback(
@@ -169,7 +129,6 @@ export default function Home() {
       try {
         const baseURL = process.env.NEXT_PUBLIC_BASE_URL
         const response = await fetch(`${baseURL}getUECInfoStreaming?message=${encodeURIComponent(newMessage)}`);
-        // const response = await fetch(`http://localhost:12344/questionStreaming?question_sentence=${encodeURIComponent(newMessage)}`);
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -211,8 +170,6 @@ export default function Home() {
               }
               break;
             }
-
-
             receivedMessage += decoder.decode(value, { stream: true });
 
             const tagMatch = receivedMessage.match(/^\[(.*?)\]/);
@@ -248,7 +205,6 @@ export default function Home() {
               aiTextLog += aiText;
 
 
-
               const currentAssistantMessage = sentences.join(" ");
               handleSpeakAi(aiTalks[0], () => {
                 setAssistantMessage(currentAssistantMessage);
@@ -276,8 +232,6 @@ export default function Home() {
     },
     [systemPrompt, chatLog, handleSpeakAi, openAiKey, koeiroParam]
   );
-
-
 
 
 

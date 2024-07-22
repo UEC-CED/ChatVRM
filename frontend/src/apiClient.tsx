@@ -15,39 +15,6 @@ export const getUECInfo = async (newMessage: string) => {
     return response.data;
 }
 
-export const getUECInfoStreaming = async (newMessage: string) => {
-    const encodedMessage = encodeURIComponent(newMessage);
-    const res = await apiClient.get(`/questionStreaming?question_sentence=${encodedMessage}`);
-
-    const reader = res.data?.getReader();
-    const decoder = new TextDecoder('utf-8');
-
-    if (!reader) {
-        throw new Error("Stream reader not available");
-    }
-
-    const stream = new ReadableStream({
-        async start(controller) {
-            try {
-                let done, value;
-                while (true) {
-                    ({ done, value } = await reader.read());
-                    if (done) break;
-                    const data = decoder.decode(value, { stream: true });
-                    controller.enqueue(data);
-                }
-            } catch (error) {
-                controller.error(error);
-            } finally {
-                reader.releaseLock();
-                controller.close();
-            }
-        },
-    });
-
-    return stream;
-}
-
 export const helloWorld = async () => {
     const response = await apiClient.get(`/helloworld`);
     return response.data;
