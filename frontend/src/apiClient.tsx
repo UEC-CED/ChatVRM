@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 export const apiClient = axios.create({
-    baseURL: "http://uec_qa:12344/"
+    baseURL: "http://uec_qa:12344/",
+    responseType: "stream"
 });
 
 export const apiViaClient = axios.create({
@@ -22,6 +23,18 @@ export const helloWorld = async () => {
 export const getUECInfoviaLocalAPI = async (message: string) => {
     try {
         const response = await apiViaClient.post('/getUECInfo/', {
+            message: message
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+export const getUECInfoStreamingviaLocalAPI = async (message: string) => {
+    try {
+        const response = await apiViaClient.post('/getUECInfoStreaming/', {
             message: message
         });
         return response.data;
