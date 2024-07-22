@@ -40,7 +40,12 @@ class UECQueryEngine:
         self.query_engine = index.as_query_engine(streaming=True) #streamingを追加
 
     def query(self, question):
-        return self.query_engine.query(question)
+        # プロンプトテンプレートを設定
+        prompt_template = "あなたは電気通信大学の情報を知っているアシスタントです。次の質問に対して日本語で回答してください。質問: {question}"
+        prompt = prompt_template.format(question=question)
+        return self.query_engine.query(prompt)
+    
+        # return self.query_engine.query(question)
 
     def make_index(self):
         documents = SimpleDirectoryReader("./data").load_data()
