@@ -2,21 +2,10 @@ import { useState, useCallback } from "react";
 import { Link } from "./link";
 
 type Props = {
-  openAiKey: string;
-  onChangeAiKey: (openAiKey: string) => void;
 };
 export const Introduction = ({
-  openAiKey,
-  onChangeAiKey,
 }: Props) => {
   const [opened, setOpened] = useState(true);
-
-  const handleAiKeyChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      onChangeAiKey(event.target.value);
-    },
-    [onChangeAiKey]
-  );
 
   return opened ? (
     <div className="absolute z-40 w-full h-full px-24 py-40  bg-black/30 font-M_PLUS_2">

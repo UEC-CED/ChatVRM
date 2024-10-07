@@ -21,7 +21,6 @@ export default function Home() {
   const { viewer } = useContext(ViewerContext);
 
   const [systemPrompt, setSystemPrompt] = useState(SYSTEM_PROMPT);
-  const [openAiKey, setOpenAiKey] = useState(process.env.NEXT_PUBLIC_OPENAI_APIKEY);
   const [koeiroParam, setKoeiroParam] = useState<KoeiroParam>(DEFAULT_PARAM);
   const [chatProcessing, setChatProcessing] = useState(false);
   const [chatLog, setChatLog] = useState<Message[]>([]);
@@ -101,10 +100,6 @@ export default function Home() {
    */
   const handleSendQAStreaming = useCallback(
     async (text: string) => {
-      if (!openAiKey) {
-        setAssistantMessage("APIキーが入力されていません");
-        return;
-      }
 
       const newMessage = text;
 
@@ -161,7 +156,6 @@ export default function Home() {
 
                 // 文ごとに音声を生成 & 再生、返答を表示
                 const currentAssistantMessage = sentences.join(" ");
-                // const currentAssistantMessage = "星野 太佑　研究室"
 
                 handleSpeakAi(aiTalks[0], () => {
                   setAssistantMessage(currentAssistantMessage);
@@ -197,12 +191,9 @@ export default function Home() {
                 continue;
               }
 
-              console.log(sentence)
-
               const aiText = `${tag} ${sentence}`;
               const aiTalks = textsToScreenplay([aiText], koeiroParam);
               aiTextLog += aiText;
-
 
               const currentAssistantMessage = sentences.join(" ");
               handleSpeakAi(aiTalks[0], () => {
@@ -229,7 +220,7 @@ export default function Home() {
         setChatProcessing(false);
       }
     },
-    [systemPrompt, chatLog, handleSpeakAi, openAiKey, koeiroParam]
+    [systemPrompt, chatLog, handleSpeakAi, koeiroParam]
   );
 
 
@@ -239,10 +230,6 @@ export default function Home() {
    */
   const handleSendChat = useCallback(
     async (text: string) => {
-      if (!openAiKey) {
-        setAssistantMessage("APIキーが入力されていません");
-        return;
-      }
 
       const newMessage = text;
 
@@ -265,7 +252,7 @@ export default function Home() {
         ...messageLog,
       ];
 
-      const stream = await getChatResponseStream(messages, openAiKey).catch(
+      const stream = await getChatResponseStream(messages).catch(
         (e) => {
           console.error(e);
           return null;
@@ -343,16 +330,13 @@ export default function Home() {
       setChatLog(messageLogAssistant);
       setChatProcessing(false);
     },
-    [systemPrompt, chatLog, handleSpeakAi, openAiKey, koeiroParam]
+    [systemPrompt, chatLog, handleSpeakAi, koeiroParam]
   );
 
   return (
     <div className={"font-M_PLUS_2"}>
       <Meta />
-      <Introduction
-        openAiKey={openAiKey || ""}
-        onChangeAiKey={setOpenAiKey}
-      />
+      <Introduction />
       <VrmViewer />
       <MessageInputContainer
         isChatProcessing={chatProcessing}
@@ -360,12 +344,10 @@ export default function Home() {
         onChatQAProcessStart={handleSendQAStreaming}
       />
       <Menu
-        openAiKey={openAiKey || ""}
         systemPrompt={systemPrompt}
         chatLog={chatLog}
         koeiroParam={koeiroParam}
         assistantMessage={assistantMessage}
-        onChangeAiKey={setOpenAiKey}
         onChangeSystemPrompt={setSystemPrompt}
         onChangeChatLog={handleChangeChatLog}
         onChangeKoeiromapParam={setKoeiroParam}

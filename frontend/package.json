@@ -16,6 +16,7 @@
     "@types/dom-speech-recognition": "^0.0.1",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
+    "eventsource-parser": "^2.0.1",
     "local-ssl-proxy": "^2.0.5",
     "next": "13.2.4",
     "node-fetch": "^3.3.1",

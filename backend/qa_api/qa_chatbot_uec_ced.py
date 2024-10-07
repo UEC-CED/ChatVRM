@@ -10,7 +10,7 @@ from langchain.chat_models import ChatOpenAI
 
 class UECQueryEngine:
     def __init__(self, reindex):
-        os.environ["OPENAI_API_KEY"] = os.environ.get("NEXT_PUBLIC_OPENAI_APIKEY")
+        os.environ["OPENAI_API_KEY"] = os.environ.get("OPENAI_API_KEY")
         logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, force=True)
 
         llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo"))
