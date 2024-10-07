@@ -22,7 +22,6 @@ export default function Home() {
 
   const [systemPrompt, setSystemPrompt] = useState(SYSTEM_PROMPT);
   const [openAiKey, setOpenAiKey] = useState(process.env.NEXT_PUBLIC_OPENAI_APIKEY);
-  const [koeiromapKey, setKoeiromapKey] = useState(process.env.NEXT_PUBLIC_KOEIRO_APIKEY);
   const [koeiroParam, setKoeiroParam] = useState<KoeiroParam>(DEFAULT_PARAM);
   const [chatProcessing, setChatProcessing] = useState(false);
   const [chatLog, setChatLog] = useState<Message[]>([]);
@@ -68,9 +67,9 @@ export default function Home() {
       onStart?: () => void,
       onEnd?: () => void
     ) => {
-      speakCharacter(screenplay, viewer, koeiromapKey || "", onStart, onEnd);
+      speakCharacter(screenplay, viewer, onStart, onEnd);
     },
-    [viewer, koeiromapKey]
+    [viewer]
   );
 
   /**
@@ -352,9 +351,7 @@ export default function Home() {
       <Meta />
       <Introduction
         openAiKey={openAiKey || ""}
-        koeiroMapKey={koeiromapKey || ""}
         onChangeAiKey={setOpenAiKey}
-        onChangeKoeiromapKey={setKoeiromapKey}
       />
       <VrmViewer />
       <MessageInputContainer
@@ -368,14 +365,12 @@ export default function Home() {
         chatLog={chatLog}
         koeiroParam={koeiroParam}
         assistantMessage={assistantMessage}
-        koeiromapKey={koeiromapKey || ""}
         onChangeAiKey={setOpenAiKey}
         onChangeSystemPrompt={setSystemPrompt}
         onChangeChatLog={handleChangeChatLog}
         onChangeKoeiromapParam={setKoeiroParam}
         handleClickResetChatLog={() => setChatLog([])}
         handleClickResetSystemPrompt={() => setSystemPrompt(SYSTEM_PROMPT)}
-        onChangeKoeiromapKey={setKoeiromapKey}
         handleSpeakEcho={handleSpeakEcho}
       />
       <GitHubLink />
