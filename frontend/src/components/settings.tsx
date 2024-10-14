@@ -12,36 +12,28 @@ import {
 import { Link } from "./link";
 
 type Props = {
-  openAiKey: string;
   systemPrompt: string;
   chatLog: Message[];
   koeiroParam: KoeiroParam;
-  koeiromapKey: string;
   onClickClose: () => void;
-  onChangeAiKey: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeSystemPrompt: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onChangeChatLog: (index: number, text: string) => void;
   onChangeKoeiroParam: (x: number, y: number) => void;
   onClickOpenVrmFile: () => void;
   onClickResetChatLog: () => void;
   onClickResetSystemPrompt: () => void;
-  onChangeKoeiromapKey: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 export const Settings = ({
-  openAiKey,
   chatLog,
   systemPrompt,
   koeiroParam,
-  koeiromapKey,
   onClickClose,
   onChangeSystemPrompt,
-  onChangeAiKey,
   onChangeChatLog,
   onChangeKoeiroParam,
   onClickOpenVrmFile,
   onClickResetChatLog,
   onClickResetSystemPrompt,
-  onChangeKoeiromapKey,
 }: Props) => {
   return (
     <div className="absolute z-40 w-full h-full bg-white/80 backdrop-blur ">
@@ -55,30 +47,6 @@ export const Settings = ({
       <div className="max-h-full overflow-auto">
         <div className="text-text1 max-w-3xl mx-auto px-24 py-64 ">
           <div className="my-24 typography-32 font-bold">設定</div>
-          {/* <div className="my-24"> */}
-            {/* <div className="my-16 typography-20 font-bold">OpenAI API キー</div> */}
-            {/* <input
-              className="text-ellipsis px-16 py-8 w-col-span-2 bg-surface1 hover:bg-surface1-hover rounded-8"
-              type="text"
-              placeholder="sk-..."
-              value={openAiKey}
-              onChange={onChangeAiKey}
-            />
-            <div>
-              APIキーは
-              <Link
-                url="https://platform.openai.com/account/api-keys"
-                label="OpenAIのサイト"
-              />
-              で取得できます。取得したAPIキーをフォームに入力してください。
-            </div> */}
-            {/* <div className="my-16">
-              ChatGPT
-              APIはブラウザから直接アクセスしています。また、APIキーや会話内容はピクシブのサーバには保存されません。
-              <br />
-              ※利用しているモデルはChatGPT API (GPT-3.5)です。
-            </div> */}
-          {/* </div> */}
           <div className="my-40">
             <div className="my-16 typography-20 font-bold">
               キャラクターモデル
@@ -105,24 +73,6 @@ export const Settings = ({
           </div>
           <div className="my-40">
             <div className="my-16 typography-20 font-bold">声の調整</div>
-            {/* <div>
-              KoemotionのKoeiromap APIを使用しています。詳しくは
-              <Link
-                url="https://koemotion.rinna.co.jp"
-                label="https://koemotion.rinna.co.jp"
-              />
-              をご覧ください。
-            </div>
-            <div className="mt-16 font-bold">API キー</div>
-            <div className="mt-8">
-              <input
-                className="text-ellipsis px-16 py-8 w-col-span-2 bg-surface1 hover:bg-surface1-hover rounded-8"
-                type="text"
-                placeholder="..."
-                value={koeiromapKey}
-                onChange={onChangeKoeiromapKey}
-              />
-            </div> */}
 
             <div className="mt-16 font-bold">プリセット</div>
             <div className="my-8 grid grid-cols-2 gap-[8px]">
