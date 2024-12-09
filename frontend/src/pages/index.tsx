@@ -14,6 +14,7 @@ import { getChatResponseStream } from "@/features/chat/openAiChat";
 import { Introduction } from "@/components/introduction";
 import { Menu } from "@/components/menu";
 import { GitHubLink } from "@/components/githubLink";
+import { CedHpLink } from "@/components/cedHpLink";
 import { Meta } from "@/components/meta";
 import { getUECInfoviaLocalAPI } from "@/apiClient";
 
@@ -26,25 +27,25 @@ export default function Home() {
   const [chatLog, setChatLog] = useState<Message[]>([]);
   const [assistantMessage, setAssistantMessage] = useState("");
 
-  useEffect(() => {
-    if (window.localStorage.getItem("chatVRMParams")) {
-      const params = JSON.parse(
-        window.localStorage.getItem("chatVRMParams") as string
-      );
-      setSystemPrompt(params.systemPrompt);
-      setKoeiroParam(params.koeiroParam);
-      setChatLog(params.chatLog);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (window.localStorage.getItem("chatVRMParams")) {
+  //     const params = JSON.parse(
+  //       window.localStorage.getItem("chatVRMParams") as string
+  //     );
+  //     setSystemPrompt(params.systemPrompt);
+  //     setKoeiroParam(params.koeiroParam);
+  //     setChatLog(params.chatLog);
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    process.nextTick(() =>
-      window.localStorage.setItem(
-        "chatVRMParams",
-        JSON.stringify({ systemPrompt, koeiroParam, chatLog })
-      )
-    );
-  }, [systemPrompt, koeiroParam, chatLog]);
+  // useEffect(() => {
+  //   process.nextTick(() =>
+  //     window.localStorage.setItem(
+  //       "chatVRMParams",
+  //       JSON.stringify({ systemPrompt, koeiroParam, chatLog })
+  //     )
+  //   );
+  // }, [systemPrompt, koeiroParam, chatLog]);
 
   const handleChangeChatLog = useCallback(
     (targetIndex: number, text: string) => {
@@ -215,7 +216,7 @@ export default function Home() {
         setChatLog(messageLogAssistant);
       } catch (error) {
         console.error("Fetch error:", error);
-        handleSpeakEcho("すみません、エラーが発生しました．");
+        handleSpeakEcho("すみません、エラーが発生しました．何度もエラーが発生する場合は、時間をおいて使用してください");
       } finally {
         setChatProcessing(false);
       }
@@ -355,7 +356,8 @@ export default function Home() {
         handleClickResetSystemPrompt={() => setSystemPrompt(SYSTEM_PROMPT)}
         handleSpeakEcho={handleSpeakEcho}
       />
-      <GitHubLink />
+      {/* <GitHubLink /> */}
+      <CedHpLink />
     </div>
   );
 }
