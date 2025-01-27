@@ -259,6 +259,7 @@ export default function Home() {
           return null;
         }
       );
+
       if (stream == null) {
         setChatProcessing(false);
         return;
@@ -275,6 +276,8 @@ export default function Home() {
           if (done) break;
 
           receivedMessage += value;
+
+          console.log(value);
 
           // 返答内容のタグ部分の検出
           const tagMatch = receivedMessage.match(/^\[(.*?)\]/);
