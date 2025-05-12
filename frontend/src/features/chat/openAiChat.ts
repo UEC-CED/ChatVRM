@@ -1,4 +1,9 @@
 import { Configuration, OpenAIApi } from "openai";
+import {
+  createParser,
+  ParsedEvent,
+  ReconnectInterval,
+} from "eventsource-parser";
 import { Message } from "../messages/messages";
 
 export async function getChatResponse(messages: Message[], apiKey: string) {
@@ -21,53 +26,85 @@ export async function getChatResponse(messages: Message[], apiKey: string) {
   });
 
   const [aiRes] = data.choices;
-  const message = aiRes.message?.content || "エラーが発生しました";
+  const message = aiRes.message?.content || "エラーが発生しました。何度もエラーが発生する場合は、時間をおいて使用してください";
 
   return { message: message };
 }
 
-export async function getChatResponseStream(
-  messages: Message[],
-  apiKey: string
-) {
-  if (!apiKey) {
-    throw new Error("Invalid API Key");
-  }
-
+export async function getChatResponseStream(messages: Message[]) {
+  const apiKey = process.env.OPENAI_API_KEY;
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${apiKey}`,
   };
-  const res = await fetch("https://api.openai.com/v1/chat/completions", {
-    headers: headers,
+
+  const response = await fetch("/ced-iot/api/generate", {
     method: "POST",
-    body: JSON.stringify({
-      model: "gpt-3.5-turbo",
-      messages: messages,
-      stream: true,
-      max_tokens: 200,
-    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ messages: messages }),
   });
 
-  const reader = res.body?.getReader();
-  if (res.status !== 200 || !reader) {
-    throw new Error("Something went wrong");
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+
+  const data = response.body;
+  if (!data) {
+    return;
+  }
+
+  const reader = data.getReader();
+
+  const onParseGPT = (event: ParsedEvent | ReconnectInterval) => {
+    if (event.type === "event") {
+      const data = event.data;
+      try {
+        const text = JSON.parse(data).text ?? "";
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
+  function isValidJSON(jsonString: string) {
+    try {
+      JSON.parse(jsonString);
+      return true; // JSON.parseが成功した場合
+    } catch (e) {
+      return false; // JSON.parseが失敗した場合
+    }
   }
 
   const stream = new ReadableStream({
     async start(controller: ReadableStreamDefaultController) {
-      const decoder = new TextDecoder("utf-8");
+      const decoder = new TextDecoder();
+      const parser = createParser(onParseGPT);
+      let done = false;
       try {
         while (true) {
-          const { done, value } = await reader.read();
+          const { value, done: doneReading } = await reader.read();
+          done = doneReading;
+
           if (done) break;
-          const data = decoder.decode(value);
-          const chunks = data
+
+          const chunkValue = await decoder.decode(value); //await追加
+          parser.feed(chunkValue);
+          const chunks = await chunkValue //await追加
             .split("data:")
             .filter((val) => !!val && val.trim() !== "[DONE]");
+
           for (const chunk of chunks) {
-            const json = JSON.parse(chunk);
-            const messagePiece = json.choices[0].delta.content;
+            // 正しくJSONをパースできた場合
+            let json: any = { text: "" };
+            if (isValidJSON(chunk)) {
+              json = await JSON.parse(chunk); //await追加 // TODO: ここが正しくパースできない。元のデータが壊れているため（デプロイ後）。
+            } else {
+              json = { text: chunk.replace(/[{}"\n:\s]|text|tex|ext|/g, "") };
+            }
+
+            const messagePiece = json.text;
             if (!!messagePiece) {
               controller.enqueue(messagePiece);
             }

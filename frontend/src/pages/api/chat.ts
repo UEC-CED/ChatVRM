@@ -32,7 +32,7 @@ export default async function handler(
   });
 
   const [aiRes] = data.choices;
-  const message = aiRes.message?.content || "エラーが発生しました";
+  const message = aiRes.message?.content || "エラーが発生しました。何度もエラーが発生する場合は、時間をおいて使用してください";
 
   res.status(200).json({ message: message });
 }

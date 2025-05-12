@@ -14,6 +14,7 @@ import { getChatResponseStream } from "@/features/chat/openAiChat";
 import { Introduction } from "@/components/introduction";
 import { Menu } from "@/components/menu";
 import { GitHubLink } from "@/components/githubLink";
+import { CedHpLink } from "@/components/cedHpLink";
 import { Meta } from "@/components/meta";
 import { getUECInfoviaLocalAPI } from "@/apiClient";
 
@@ -21,32 +22,30 @@ export default function Home() {
   const { viewer } = useContext(ViewerContext);
 
   const [systemPrompt, setSystemPrompt] = useState(SYSTEM_PROMPT);
-  const [openAiKey, setOpenAiKey] = useState(process.env.NEXT_PUBLIC_OPENAI_APIKEY);
-  const [koeiromapKey, setKoeiromapKey] = useState(process.env.NEXT_PUBLIC_KOEIRO_APIKEY);
   const [koeiroParam, setKoeiroParam] = useState<KoeiroParam>(DEFAULT_PARAM);
   const [chatProcessing, setChatProcessing] = useState(false);
   const [chatLog, setChatLog] = useState<Message[]>([]);
   const [assistantMessage, setAssistantMessage] = useState("");
 
-  useEffect(() => {
-    if (window.localStorage.getItem("chatVRMParams")) {
-      const params = JSON.parse(
-        window.localStorage.getItem("chatVRMParams") as string
-      );
-      setSystemPrompt(params.systemPrompt);
-      setKoeiroParam(params.koeiroParam);
-      setChatLog(params.chatLog);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (window.localStorage.getItem("chatVRMParams")) {
+  //     const params = JSON.parse(
+  //       window.localStorage.getItem("chatVRMParams") as string
+  //     );
+  //     setSystemPrompt(params.systemPrompt);
+  //     setKoeiroParam(params.koeiroParam);
+  //     setChatLog(params.chatLog);
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    process.nextTick(() =>
-      window.localStorage.setItem(
-        "chatVRMParams",
-        JSON.stringify({ systemPrompt, koeiroParam, chatLog })
-      )
-    );
-  }, [systemPrompt, koeiroParam, chatLog]);
+  // useEffect(() => {
+  //   process.nextTick(() =>
+  //     window.localStorage.setItem(
+  //       "chatVRMParams",
+  //       JSON.stringify({ systemPrompt, koeiroParam, chatLog })
+  //     )
+  //   );
+  // }, [systemPrompt, koeiroParam, chatLog]);
 
   const handleChangeChatLog = useCallback(
     (targetIndex: number, text: string) => {
@@ -68,9 +67,9 @@ export default function Home() {
       onStart?: () => void,
       onEnd?: () => void
     ) => {
-      speakCharacter(screenplay, viewer, koeiromapKey, onStart, onEnd);
+      speakCharacter(screenplay, viewer, onStart, onEnd);
     },
-    [viewer, koeiromapKey]
+    [viewer]
   );
 
   /**
@@ -98,43 +97,131 @@ export default function Home() {
   );
 
   /**
-   * アシスタントに電通大のQAを聞く
+   * アシスタントに電通大のQAをStreamingで聞く
    */
-  const handleSendQA = useCallback(
+  const handleSendQAStreaming = useCallback(
     async (text: string) => {
+
       const newMessage = text;
-      let aiTextLog = "";
+
       if (newMessage == null) return;
 
       setChatProcessing(true);
-      // ユーザーの発言を追加して表示
       const messageLog: Message[] = [
         ...chatLog,
         { role: "user", content: newMessage },
       ];
       setChatLog(messageLog);
+
+      const messages: Message[] = [
+        {
+          role: "system",
+          content: systemPrompt,
+        },
+        ...messageLog,
+      ];
+
       try {
-        const data = await getUECInfoviaLocalAPI(newMessage);
-        aiTextLog = data.ans
-        // 音声合成して再生
-        handleSpeakEcho(aiTextLog);
-        // アシスタントの返答をログに追加
+        const baseURL = process.env.NEXT_PUBLIC_BASE_URL
+        const response = await fetch(`${baseURL}getUECInfoStreaming?message=${encodeURIComponent(newMessage)}`);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const reader = response.body?.getReader();
+        if (!reader) {
+          throw new Error('Failed to get reader from response body');
+        }
+
+        const decoder = new TextDecoder('utf-8');
+        let receivedMessage = "";
+        let aiTextLog = "";
+        let tag = "";
+        const sentences = new Array<string>();
+        let isSentenceMatch = false;
+
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            // TODO: ここで、ほんとに発話をしたか（sentenceMatchのif文内に入ったかどうか）を確認する。
+            if (done) {
+              // 一度もSentenceMatchにマッチしなかった場合
+              console.log("done!")
+              if (!isSentenceMatch) {
+                console.log("!isSentenceMatch.receivedMessage: ", receivedMessage);
+                const aiText = `${tag} ${receivedMessage}`;
+                const aiTalks = textsToScreenplay([aiText], koeiroParam);
+                aiTextLog += aiText;
+
+                // 文ごとに音声を生成 & 再生、返答を表示
+                const currentAssistantMessage = sentences.join(" ");
+
+                handleSpeakAi(aiTalks[0], () => {
+                  setAssistantMessage(currentAssistantMessage);
+                });
+              }
+              break;
+            }
+            receivedMessage += decoder.decode(value, { stream: true });
+
+            const tagMatch = receivedMessage.match(/^\[(.*?)\]/);
+            if (tagMatch && tagMatch[0]) {
+              tag = tagMatch[0];
+              receivedMessage = receivedMessage.slice(tag.length);
+            }
+
+            const sentenceMatch = receivedMessage.match(
+              /^(.+[。．！？\n]|.{10,}[、,])/
+            );
+            if (sentenceMatch && sentenceMatch[0]) {
+              isSentenceMatch = true;
+              const sentence = sentenceMatch[0];
+              sentences.push(sentence);
+              receivedMessage = receivedMessage
+                .slice(sentence.length)
+                .trimStart();
+
+              if (
+                !sentence.replace(
+                  /^[\s\[\(\{「［（【『〈《〔｛«‹〘〚〛〙›»〕》〉』】）］」\}\)\]]+$/g,
+                  ""
+                )
+              ) {
+                continue;
+              }
+
+              const aiText = `${tag} ${sentence}`;
+              const aiTalks = textsToScreenplay([aiText], koeiroParam);
+              aiTextLog += aiText;
+
+              const currentAssistantMessage = sentences.join(" ");
+              handleSpeakAi(aiTalks[0], () => {
+                setAssistantMessage(currentAssistantMessage);
+              });
+            }
+          }
+        } catch (e) {
+          console.error(e);
+        } finally {
+          reader.releaseLock();
+        }
+
         const messageLogAssistant: Message[] = [
           ...messageLog,
           { role: "assistant", content: aiTextLog },
         ];
+
         setChatLog(messageLogAssistant);
+      } catch (error) {
+        console.error("Fetch error:", error);
+        handleSpeakEcho("すみません、エラーが発生しました．何度もエラーが発生する場合は、時間をおいて使用してください");
+      } finally {
         setChatProcessing(false);
-      } catch(error) {
-        console.error(error);
-        handleSpeakEcho("すみません、エラーが発生しました．");
-        setChatProcessing(false);
-        // ユーザーの発言を削除(最後の発話を削除)
-        const messageLog: Message[] = chatLog.slice(0, -1);
-        setChatLog(messageLog);
       }
     },
-    [chatLog, handleSpeakEcho]
+    [systemPrompt, chatLog, handleSpeakAi, koeiroParam]
   );
 
 
@@ -144,10 +231,6 @@ export default function Home() {
    */
   const handleSendChat = useCallback(
     async (text: string) => {
-      if (!openAiKey) {
-        setAssistantMessage("APIキーが入力されていません");
-        return;
-      }
 
       const newMessage = text;
 
@@ -170,12 +253,13 @@ export default function Home() {
         ...messageLog,
       ];
 
-      const stream = await getChatResponseStream(messages, openAiKey).catch(
+      const stream = await getChatResponseStream(messages).catch(
         (e) => {
           console.error(e);
           return null;
         }
       );
+
       if (stream == null) {
         setChatProcessing(false);
         return;
@@ -192,6 +276,8 @@ export default function Home() {
           if (done) break;
 
           receivedMessage += value;
+
+          console.log(value);
 
           // 返答内容のタグ部分の検出
           const tagMatch = receivedMessage.match(/^\[(.*?)\]/);
@@ -248,41 +334,33 @@ export default function Home() {
       setChatLog(messageLogAssistant);
       setChatProcessing(false);
     },
-    [systemPrompt, chatLog, handleSpeakAi, openAiKey, koeiroParam]
+    [systemPrompt, chatLog, handleSpeakAi, koeiroParam]
   );
 
   return (
     <div className={"font-M_PLUS_2"}>
       <Meta />
-      <Introduction
-        openAiKey={openAiKey}
-        koeiroMapKey={koeiromapKey}
-        onChangeAiKey={setOpenAiKey}
-        onChangeKoeiromapKey={setKoeiromapKey}
-      />
+      <Introduction />
       <VrmViewer />
       <MessageInputContainer
         isChatProcessing={chatProcessing}
         onChatProcessStart={handleSendChat}
-        onChatQAProcessStart={handleSendQA}
+        onChatQAProcessStart={handleSendQAStreaming}
       />
       <Menu
-        openAiKey={openAiKey}
         systemPrompt={systemPrompt}
         chatLog={chatLog}
         koeiroParam={koeiroParam}
         assistantMessage={assistantMessage}
-        koeiromapKey={koeiromapKey}
-        onChangeAiKey={setOpenAiKey}
         onChangeSystemPrompt={setSystemPrompt}
         onChangeChatLog={handleChangeChatLog}
         onChangeKoeiromapParam={setKoeiroParam}
         handleClickResetChatLog={() => setChatLog([])}
         handleClickResetSystemPrompt={() => setSystemPrompt(SYSTEM_PROMPT)}
-        onChangeKoeiromapKey={setKoeiromapKey}
         handleSpeakEcho={handleSpeakEcho}
       />
-      <GitHubLink />
+      {/* <GitHubLink /> */}
+      <CedHpLink />
     </div>
   );
 }

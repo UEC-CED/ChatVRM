@@ -44,19 +44,20 @@ export const MessageInput = ({
 
             <IconButton
               iconName="24/Send"
-              className="bg-secondary hover:bg-secondary-hover active:bg-secondary-press disabled:bg-secondary-disabled"
+              className="bg-secondary hover:bg-secondary-hover active:bg-secondary-press disabled:bg-secondary-disabled whitespace-nowrap"
               isProcessing={isChatProcessing}
               disabled={isChatProcessing || !userMessage}
+              label="CED Q&A"
               onClick={onClickSendButton}
-              description="ChatGPTのみを使って返答文を生成します"
+              description="ChatGPTを用いて、CEDのQ&Aと雑談を生成しますs"
             />
             <IconButton
               iconName="24/Question"
-              className="bg-secondary hover:bg-secondary-hover active:bg-secondary-press disabled:bg-secondary-disabled"
+              className="bg-secondary hover:bg-secondary-hover active:bg-secondary-press disabled:bg-secondary-disabled whitespace-nowrap"
               isProcessing={isChatProcessing}
               disabled={isChatProcessing || !userMessage}
               onClick={onClickSendQAButton}
-              label="Q&A"
+              label="UEC Q&A"
               description="電気通信大学の情報を参照して返答文を生成します"
             />
           </div>
