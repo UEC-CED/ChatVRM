@@ -49,7 +49,7 @@ export const MessageInput = ({
               disabled={isChatProcessing || !userMessage}
               label="CED Q&A"
               onClick={onClickSendButton}
-              description="ChatGPTを用いて、CEDのQ&Aと雑談を生成しますs"
+              description="ChatGPTを用いて、CEDのQ&Aと雑談を生成します"
             />
             <IconButton
               iconName="24/Question"
