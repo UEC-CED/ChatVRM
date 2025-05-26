@@ -345,7 +345,7 @@ export default function Home() {
       <MessageInputContainer
         isChatProcessing={chatProcessing}
         onChatProcessStart={handleSendChat}
-        onChatQAProcessStart={handleSendQAStreaming}
+        // onChatQAProcessStart={handleSendQAStreaming}
       />
       <Menu
         systemPrompt={systemPrompt}
