@@ -6,6 +6,7 @@ import React, { useCallback, useContext, useRef, useState } from "react";
 import { Settings } from "./settings";
 import { ViewerContext } from "@/features/vrmViewer/viewerContext";
 import { AssistantText } from "./assistantText";
+import { Introduction } from "./introduction";
 
 type Props = {
   systemPrompt: string;
@@ -34,6 +35,9 @@ export const Menu = ({
   const [showChatLog, setShowChatLog] = useState(false);
   const { viewer } = useContext(ViewerContext);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [showIntroduction, setShowIntroduction] = useState(false);
+
 
   const handleChangeSystemPrompt = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -82,6 +86,12 @@ export const Menu = ({
       <div className="absolute z-10 m-24">
         <div className="grid grid-flow-col gap-[8px]">
           <IconButton
+            iconName="24/Question"
+            label="使い方の説明"
+            isProcessing={false}
+            onClick={() => setShowIntroduction(true)}
+          ></IconButton>
+          <IconButton
             iconName="24/Menu"
             label="設定"
             isProcessing={false}
@@ -129,6 +139,10 @@ export const Menu = ({
         accept=".vrm"
         ref={fileInputRef}
         onChange={handleChangeVrmFile}
+      />
+      <Introduction
+        opened={showIntroduction}
+        onClose={() => setShowIntroduction(false)}
       />
     </>
   );

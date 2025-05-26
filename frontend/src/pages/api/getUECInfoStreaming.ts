@@ -8,8 +8,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-
-
   try {
     const response = await fetch(`http://uec_qa:12344/questionStreaming?question_sentence=${encodeURIComponent(message)}`);
 
