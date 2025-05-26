@@ -13,6 +13,7 @@
 //   try {
 //     const response = await fetch(`http://uec_qa:12344/questionStreaming?question_sentence=${encodeURIComponent(message)}`);
 
+
 //     if (!response.ok) {
 //       res.status(response.status).json({ error: 'Failed to fetch from backend' });
 //       return;
