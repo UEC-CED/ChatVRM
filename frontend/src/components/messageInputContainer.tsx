@@ -98,7 +98,7 @@ export const MessageInputContainer = ({
       onChangeUserMessage={(e) => setUserMessage(e.target.value)}
       onClickMicButton={handleClickMicButton}
       onClickSendButton={handleClickSendButton}
-      onClickSendQAButton={handleClickSendQAButton}
+      // onClickSendQAButton={handleClickSendQAButton}
     />
   );
 };
