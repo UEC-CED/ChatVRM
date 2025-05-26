@@ -84,7 +84,7 @@ export const Menu = ({
   return (
     <>
       <div className="absolute z-10 m-24">
-        <div className="grid grid-flow-col gap-[8px]">
+        <div className="grid grid-flow-col gap-[16px]">
           <IconButton
             iconName="24/Question"
             label="使い方の説明"
