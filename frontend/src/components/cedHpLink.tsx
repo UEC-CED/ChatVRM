@@ -19,7 +19,7 @@ export const CedHpLink = () => {
           width={36}
           src={buildUrl("/qa_icon.png")}
         />
-        <div className="mx-4 text-black font-bold">CED FAQ</div>
+        <div className="mx-4 my-auto text-black font-bold text-2xl">CED FAQ</div>
       </div>
       </a>
     </div>

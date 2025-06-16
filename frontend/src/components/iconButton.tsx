@@ -19,7 +19,7 @@ export const IconButton = ({
     <button
     data-tooltip-id="my-tooltip" data-tooltip-content={description}
       {...rest}
-      className={`bg-primary hover:bg-primary-hover active:bg-primary-press disabled:bg-primary-disabled text-white rounded-[5rem] text-3xl p-16 text-center inline-flex items-center mr-2
+      className={`bg-primary hover:bg-primary-hover active:bg-primary-press disabled:bg-primary-disabled text-white rounded-[5rem] text-2xl p-16 text-center inline-flex items-center mr-2
         ${rest.className}
       `}
     >
