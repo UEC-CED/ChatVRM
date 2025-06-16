@@ -11,15 +11,15 @@ export const CedHpLink = () => {
         rel="noopener noreferrer"
         target="_blank"
       >
-        <div className="p-8 rounded-16 bg-[#EDEDED] hover:bg-[#CCCCCC] active:bg-[#AFAFAF] flex">
+        <div className="px-[3rem] py-16 rounded-16 bg-[#EDEDED] hover:bg-[#CCCCCC] active:bg-[#AFAFAF] flex border">
         <Image
           // alt="https://github.com/pixiv/ChatVRM"
           alt="https://sites.google.com/gl.cc.uec.ac.jp/ced/faq?authuser=0"
-          height={24}
-          width={24}
+          height={36}
+          width={36}
           src={buildUrl("/qa_icon.png")}
         />
-        <div className="mx-4 text-black font-bold">CED FAQ</div>
+        <div className="mx-4 my-auto text-black font-bold text-2xl">CED FAQ</div>
       </div>
       </a>
     </div>

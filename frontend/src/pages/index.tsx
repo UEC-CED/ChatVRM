@@ -27,6 +27,8 @@ export default function Home() {
   const [chatLog, setChatLog] = useState<Message[]>([]);
   const [assistantMessage, setAssistantMessage] = useState("");
 
+  const [showIntroduction, setShowIntroduction] = useState(true);
+
   // useEffect(() => {
   //   if (window.localStorage.getItem("chatVRMParams")) {
   //     const params = JSON.parse(
@@ -340,12 +342,12 @@ export default function Home() {
   return (
     <div className={"font-M_PLUS_2"}>
       <Meta />
-      <Introduction />
+      <Introduction opened={showIntroduction} onClose={() => setShowIntroduction(false)}/>
       <VrmViewer />
       <MessageInputContainer
         isChatProcessing={chatProcessing}
         onChatProcessStart={handleSendChat}
-        onChatQAProcessStart={handleSendQAStreaming}
+        // onChatQAProcessStart={handleSendQAStreaming}
       />
       <Menu
         systemPrompt={systemPrompt}
