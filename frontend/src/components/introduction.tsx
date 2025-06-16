@@ -2,6 +2,9 @@
 
 import { ReactNode } from "react";
 import { Link } from "./link";
+import Image from "next/image";
+import { buildUrl } from "@/utils/buildUrl";
+
 
 type Props = {
   opened: boolean;
@@ -22,6 +25,15 @@ export const Introduction = ({ opened, onClose }: Props) => {
             電気通信大学 技術職員である島崎をAI化したものです。
             雑談や電気通信大学に関する質問ができます。
           </div>
+
+          <Image
+            src={buildUrl("/description.png")}
+            alt="AI Shimazaki description"
+            width={1000} // 適切なサイズに調整
+            height={700}
+            className="mb-8"
+          />
+
         </div>
         <div className="my-24">
           <div className="my-8 font-bold typography-20 text-secondary">
