@@ -8,7 +8,7 @@ type Props = {
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
   onClickSendButton: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  onClickSendQAButton: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  // onClickSendQAButton: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onClickMicButton: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 export const MessageInput = ({
@@ -18,7 +18,7 @@ export const MessageInput = ({
   onChangeUserMessage,
   onClickMicButton,
   onClickSendButton,
-  onClickSendQAButton,
+  // onClickSendQAButton,
 }: Props) => {
   return (
     <div className="absolute bottom-0 z-20 w-screen">
@@ -38,7 +38,7 @@ export const MessageInput = ({
               placeholder="聞きたいことをいれてね"
               onChange={onChangeUserMessage}
               disabled={isChatProcessing}
-              className="bg-surface1 hover:bg-surface1-hover focus:bg-surface1 disabled:bg-surface1-disabled disabled:text-primary-disabled rounded-16 w-full px-16 text-text-primary typography-16 font-bold disabled"
+              className="bg-surface1 hover:bg-surface1-hover focus:bg-surface1 disabled:bg-surface1-disabled disabled:text-primary-disabled rounded-16 w-full px-16 text-text-primary typography-16 font-bold disabled placeholder:text-xl focus:text-xl"
               value={userMessage}
             ></input>
 
@@ -51,7 +51,7 @@ export const MessageInput = ({
               onClick={onClickSendButton}
               description="ChatGPTを用いて、CEDのQ&Aと雑談を生成しますs"
             />
-            <IconButton
+            {/* <IconButton
               iconName="24/Question"
               className="bg-secondary hover:bg-secondary-hover active:bg-secondary-press disabled:bg-secondary-disabled whitespace-nowrap"
               isProcessing={isChatProcessing}
@@ -59,7 +59,7 @@ export const MessageInput = ({
               onClick={onClickSendQAButton}
               label="UEC Q&A"
               description="電気通信大学の情報を参照して返答文を生成します"
-            />
+            /> */}
           </div>
         </div>
         <div className="py-4 bg-[#413D43] text-center text-white font-Montserrat">
