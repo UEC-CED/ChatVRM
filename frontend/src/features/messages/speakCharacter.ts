@@ -1,5 +1,5 @@
 import { wait } from "@/utils/wait";
-import { synthesizeVoiceApi } from "./synthesizeVoice";
+import { synthesizeVoiceApi, synthesizeVoicevoxApi } from "./synthesizeVoice";
 import { Viewer } from "../vrmViewer/viewer";
 import { Screenplay } from "./messages";
 import { Talk } from "./messages";
@@ -46,22 +46,41 @@ const createSpeakCharacter = () => {
 
 export const speakCharacter = createSpeakCharacter();
 
+// export const fetchAudio = async (
+//   talk: Talk
+// ): Promise<ArrayBuffer> => {
+//   const ttsVoice = await synthesizeVoiceApi(
+//     talk.message,
+//     talk.speakerX,
+//     talk.speakerY,
+//     talk.style,
+//   );
+//   const url = ttsVoice.audio;
+
+//   if (url == null) {
+//     throw new Error("Something went wrong");
+//   }
+
+//   const resAudio = await fetch(url);
+//   const buffer = await resAudio.arrayBuffer();
+//   return buffer;
+// };
+
+
 export const fetchAudio = async (
   talk: Talk
 ): Promise<ArrayBuffer> => {
-  const ttsVoice = await synthesizeVoiceApi(
+  // TalkオブジェクトからspeakerIdを取得するか、固定値を指定
+  // ここでは例として、talk.styleをspeakerIdとして扱うことにします。
+  // 必要に応じて、koeiromapのパラメータから適切なspeakerIdへの変換ロジックを実装してください。
+  // 例：const speakerId = convertStyleToSpeakerId(talk.style);
+  const speakerId = 1; // 一旦「ずんだもん」に固定してテスト
+
+  // 新しいAPIクライアントを呼び出す
+  const buffer = await synthesizeVoicevoxApi(
     talk.message,
-    talk.speakerX,
-    talk.speakerY,
-    talk.style,
+    speakerId,
   );
-  const url = ttsVoice.audio;
 
-  if (url == null) {
-    throw new Error("Something went wrong");
-  }
-
-  const resAudio = await fetch(url);
-  const buffer = await resAudio.arrayBuffer();
   return buffer;
 };
