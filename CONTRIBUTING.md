@@ -13,6 +13,7 @@
 ![System Architecture](images/system_architecture.png)
 
 ChatVRM(https://github.com/pixiv/ChatVRM)に、電通大QAを回答できるようにRAGのバックエンドを追加した構成
+ただしkoeiromap (koemotion) APIのサービス終了に伴い、dockerでVOICEVOXを動かしローカルで音声を生成するように改造
 
 <h2 id="technology-used">使用技術について</h2>
 

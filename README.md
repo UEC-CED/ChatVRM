@@ -8,7 +8,6 @@ Docker, docker-composeを端末にインストール
 ### APIキー
 以下を取得してください
 - OPENAI APIキー （参考：[https://book.st-hakky.com/data-science/open-ai-create-api-key/](https://book.st-hakky.com/data-science/open-ai-create-api-key/)）
-- Koeiromap APIキー （参考：[https://note.com/npaka/n/n44652d3c9fcc](https://note.com/npaka/n/n44652d3c9fcc)）
 
 `.env.local`を`/frontend/`に作成してAPIキーを記載(参考：[/frontend/.env.local.sample](/frontend/.env.local.sample))  
 
@@ -48,13 +47,6 @@ ChatGPT APIの仕様や利用規約については以下のリンクや公式サ
 - [https://openai.com/policies/api-data-usage-policies](https://openai.com/policies/api-data-usage-policies)
 
 
-## Koeiromap API
-ChatVRMでは返答文の音声読み上げにKoemotionのKoeiromap APIを使用しています。
-
-Koeiromap APIの仕様や利用規約については以下のリンクや公式サイトをご確認ください。
-
-- [https://koemotion.rinna.co.jp/](https://koemotion.rinna.co.jp/)
-
 # VRM
 VRMファイルを用意すれば任意のアバターを読み込める  
 例えば、[ジョイマン高木のVRM](https://campaign.showroom-live.com/takagi/)を使用することができる  
@@ -62,3 +54,20 @@ VRMファイルを用意すれば任意のアバターを読み込める
 
 # 背景
 [_document.tsx](src/pages/_document.tsx)の`<body style={{ backgroundImage: `url(${buildUrl("/bg-ced.png")})` }}>`を変更
+
+
+
+
+---
+
+# 旧仕様
+
+## Koeiromap API
+ChatVRMでは返答文の音声読み上げにKoemotionのKoeiromap APIを使用していま~~す~~した。
+
+Koeiromap APIの仕様や利用規約については以下のリンクや公式サイトをご確認ください。
+
+- [https://koemotion.rinna.co.jp/](https://koemotion.rinna.co.jp/)
+
+### APIキー
+- Koeiromap APIキー （参考：[https://note.com/npaka/n/n44652d3c9fcc](https://note.com/npaka/n/n44652d3c9fcc)）

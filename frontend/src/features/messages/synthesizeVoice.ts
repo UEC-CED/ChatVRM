@@ -39,3 +39,31 @@ export async function synthesizeVoiceApi(
 
   return { audio: data.audio };
 }
+
+
+// voicevox用の新しいAPIクライアント関数
+export async function synthesizeVoicevoxApi(
+  message: string,
+  speakerId: number,
+): Promise<ArrayBuffer> {
+  const body = {
+    message: message,
+    speakerId: speakerId,
+  };
+
+  const res = await fetch("/ced-iot/api/voicevox", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch audio from voicevox API");
+  }
+
+  // レスポンスはWAVのバイナリデータなので、arrayBuffer()で受け取る
+  const buffer = await res.arrayBuffer();
+  return buffer;
+}
