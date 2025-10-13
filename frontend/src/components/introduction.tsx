@@ -47,7 +47,7 @@ export const Introduction = ({ opened, onClose }: Props) => {
             、音声合成には
             <Link url={"https://voicevox.hiroshiba.jp"} label={"VOICEVOX"} />
             の
-            <Link url={"https://voicevox.hiroshiba.jp/product/zundamon/"} label={"ずんだもん"} />
+            <Link url={"https://voicevox.hiroshiba.jp/product/kurono_takehiro/"} label={"玄野武宏"} />
             を使用しています。
           </div>
         </div>

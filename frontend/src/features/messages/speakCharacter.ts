@@ -74,7 +74,7 @@ export const fetchAudio = async (
   // ここでは例として、talk.styleをspeakerIdとして扱うことにします。
   // 必要に応じて、koeiromapのパラメータから適切なspeakerIdへの変換ロジックを実装してください。
   // 例：const speakerId = convertStyleToSpeakerId(talk.style);
-  const speakerId = 1; // 一旦「ずんだもん」に固定してテスト
+  const speakerId = 11;    // 玄野武宏 ノーマル
 
   // 新しいAPIクライアントを呼び出す
   const buffer = await synthesizeVoicevoxApi(
