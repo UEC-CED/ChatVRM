@@ -43,16 +43,11 @@ export const Introduction = ({ opened, onClose }: Props) => {
             3Dモデルの表示や操作には
             <Link url={"https://github.com/pixiv/three-vrm"} label={"@pixiv/three-vrm"} />、
             会話文生成には
-            <Link
-              url={"https://openai.com/blog/introducing-chatgpt-and-whisper-apis"}
-              label={"ChatGPT API"}
-            />、
-            音声合成には
-            <Link url={"https://koemotion.rinna.co.jp/"} label={"Koemotion"} /> の
-            <Link
-              url={"https://developers.rinna.co.jp/product/#product=koeiromap-free"}
-              label={"Koeiromap API"}
-            />
+            <Link url={"https://openai.com/blog/introducing-chatgpt-and-whisper-apis"} label={"ChatGPT API"}/>
+            、音声合成には
+            <Link url={"https://voicevox.hiroshiba.jp"} label={"VOICEVOX"} />
+            の
+            <Link url={"https://voicevox.hiroshiba.jp/product/zundamon/"} label={"ずんだもん"} />
             を使用しています。
           </div>
         </div>
