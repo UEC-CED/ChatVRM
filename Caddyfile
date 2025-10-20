@@ -9,5 +9,9 @@
 }
 
 localhost {
-    reverse_proxy　front_app:3000
+    reverse_proxy front_app:3000
+}
+
+brown01.ced.cei.uec.ac.jp {
+    reverse_proxy front_app:3000
 }
