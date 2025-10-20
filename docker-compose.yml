@@ -4,15 +4,16 @@ services:
     build:
       context: ./frontend
     container_name: chatVRM
-    ports:
-      - 8080:8080
-      - 3000:3000
-      # - 80:80
-      - 443:443
+    # ports:
+      # - 8080:8080
+      # - 3000:3000
+      # # - 80:80
+      # - 443:443
     tty: true
     volumes:
       - ./frontend:/workspace
-    command: sh -c "bash create_certificates.sh && npm install && npm run dev:proxy"
+    # command: sh -c "bash create_certificates.sh && npm install && npm run dev:proxy"
+    command: sh -c "npm install && npm run dev"
     networks:
       - nginx_network
 
@@ -47,6 +48,19 @@ services:
     networks:
       - nginx_network
   # === ここまで追加 ===
+
+  caddy:
+    image: caddy:2
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./data:/data 
+      - ./config:/config
+      - ./log/caddy:/var/log/caddy
+    restart: unless-stopped
 
 networks:
   nginx_network:
