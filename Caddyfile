@@ -1,0 +1,17 @@
+{
+    log default {
+        output file /var/log/caddy/caddy.log {
+            roll_size 10mb
+            roll_keep 20
+            roll_keep_for 720h
+        }
+    }
+}
+
+localhost {
+    reverse_proxy front_app:3000
+}
+
+brown01.ced.cei.uec.ac.jp {
+    reverse_proxy front_app:3000
+}
