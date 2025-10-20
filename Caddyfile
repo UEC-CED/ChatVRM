@@ -8,19 +8,6 @@
     }
 }
 
-# myserver1.example.comをlocal-server1:10080に転送
-#myserver1.example.com {
-#    reverse_proxy http://local-server1:10080
-#}
-
-# myserver2.example.comをlocal-server2:10080に転送
-# myserver2.example.com/api/*へのリクエストはlocal-api-server:10080に転送
-#myserver2.example.com {
-#    reverse_proxy /api/* http://local-api-server:10080
-#    reverse_proxy http://local-server2:10080
-#}
-
 localhost {
-#    reverse_proxy /ced-iot/* front_app:3000/ced-iot
     reverse_proxy　front_app:3000
 }
